@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- USER MODEL ---
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String
+  password  String
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relationships
+  createdWorkLogs   WorkLog[] @relation("Author")
+  collaborations    WorkLog[] @relation("Collaborators")
+  
+  // New relationship: A user can have many assignments
+  assignments       GoalAssignment[]
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+// --- GOAL MODEL ---
+model Goal {
+  id          String    @id @default(cuid())
+  title       String
+  target      Int       // This will now represent the SUM of all individual targets
+  unit        String
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relationships
+  workLogs    WorkLog[]
+  
+  // New relationship: A goal can have many assignments
+  assignments GoalAssignment[]
+}
+
+// --- NEW! GOAL ASSIGNMENT MODEL ---
+// This is the "join table" that connects Users and Goals with a specific target
+model GoalAssignment {
+  id          String @id @default(cuid())
+  target      Int    // The sub-target for this specific user in this goal
+
+  // Foreign key for Goal
+  goalId      String
+  goal        Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  // Foreign key for User
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // A user can only be assigned to a goal once
+  @@unique([goalId, userId])
+}
+
+
+// --- WORK LOG MODEL ---
+model WorkLog {
+  id            String    @id @default(cuid())
+  description   String
+  quantity      Int
+  completedAt   DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relationships
+  goalId        String
+  goal          Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  authorId      String
+  author        User      @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
+  
+  collaborators User[]    @relation("Collaborators")
+
+  images        Image[]
+}
+
+// --- IMAGE MODEL ---
+model Image {
+  id          String    @id @default(cuid())
+  url         String
+  createdAt   DateTime  @default(now())
+
+  // Relationships
+  workLogId   String
+  workLog     WorkLog   @relation(fields: [workLogId], references: [id], onDelete: Cascade)
+}
