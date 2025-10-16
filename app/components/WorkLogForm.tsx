@@ -4,8 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Box, TextField, Button, Typography, Select, MenuItem, 
   FormControl, InputLabel, CircularProgress, Alert,
-  Paper, Grid, IconButton,
-  Dialog, DialogTitle, DialogContent, DialogActions
+  Paper, IconButton,
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  SelectChangeEvent
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -112,6 +113,11 @@ export default function WorkLogForm({ onSave, open = true, onClose, initialData 
     return () => newFiles.forEach(file => URL.revokeObjectURL((file as any).preview));
   }, [newFiles]);
 
+  // Handler for Select component
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    setSelectedGoalId(event.target.value);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!user) { setError("You must be logged in."); return; }
@@ -182,7 +188,7 @@ export default function WorkLogForm({ onSave, open = true, onClose, initialData 
             labelId="goal-select-label" 
             value={selectedGoalId} 
             label="Related Goal / KPI" 
-            onChange={(e) => setSelectedGoalId(e.target.value)} 
+            onChange={handleSelectChange}
             disabled={loadingGoals}
         >
           {loadingGoals ? <MenuItem disabled>Loading goals...</MenuItem> : 
@@ -198,20 +204,24 @@ export default function WorkLogForm({ onSave, open = true, onClose, initialData 
       </Box>
       
       <Typography variant="subtitle2" color="text.secondary" sx={{ mt: isEditing ? 1 : 0 }}>Images</Typography>
-      <Grid container spacing={1}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
         {existingImages.map(image => (
-          <Grid item key={image.id}><Box sx={{ position: 'relative' }}>
+          <Box key={image.id} sx={{ position: 'relative' }}>
             <Image src={image.url} alt="existing image" width={80} height={80} style={{ borderRadius: '4px', objectFit: 'cover' }} />
-            <IconButton size="small" onClick={() => removeExistingImage(image.id)} sx={{ position: 'absolute', top: -5, right: -5, bgcolor: 'rgba(0,0,0,0.6)', '&:hover': { bgcolor: 'rgba(0,0,0,0.8)'} }}><CloseIcon fontSize="small" sx={{ color: 'white' }} /></IconButton>
-          </Box></Grid>
+            <IconButton size="small" onClick={() => removeExistingImage(image.id)} sx={{ position: 'absolute', top: -5, right: -5, bgcolor: 'rgba(0,0,0,0.6)', '&:hover': { bgcolor: 'rgba(0,0,0,0.8)'} }}>
+              <CloseIcon fontSize="small" sx={{ color: 'white' }} />
+            </IconButton>
+          </Box>
         ))}
         {newFiles.map((file, index) => (
-          <Grid item key={index}><Box sx={{ position: 'relative' }}>
+          <Box key={index} sx={{ position: 'relative' }}>
             <Image src={(file as any).preview} alt={file.name} width={80} height={80} style={{ borderRadius: '4px', objectFit: 'cover' }} />
-            <IconButton size="small" onClick={() => removeNewFile(file)} sx={{ position: 'absolute', top: -5, right: -5, bgcolor: 'rgba(0,0,0,0.6)', '&:hover': { bgcolor: 'rgba(0,0,0,0.8)'} }}><CloseIcon fontSize="small" sx={{ color: 'white' }} /></IconButton>
-          </Box></Grid>
+            <IconButton size="small" onClick={() => removeNewFile(file)} sx={{ position: 'absolute', top: -5, right: -5, bgcolor: 'rgba(0,0,0,0.6)', '&:hover': { bgcolor: 'rgba(0,0,0,0.8)'} }}>
+              <CloseIcon fontSize="small" sx={{ color: 'white' }} />
+            </IconButton>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       <Paper {...getRootProps()} sx={{ p: 2, mt: 1, border: '2px dashed', borderColor: isDragActive ? 'primary.main' : 'divider', textAlign: 'center', cursor: 'pointer', '&:hover': { borderColor: 'text.primary' } }}>
         <input {...getInputProps()} />
