@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, context: Context) {
             where: { authorId: userId },
             select: { goalId: true }
         });
-        const involvedGoalIds = [...new Set(userWorkLogs.map(log => log.goalId))];
+        const involvedGoalIds = Array.from(new Set(userWorkLogs.map(log => log.goalId)));
 
         const goalsWithUserProgress = await prisma.goal.findMany({
             where: {
