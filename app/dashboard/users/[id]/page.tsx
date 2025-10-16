@@ -9,12 +9,11 @@ import {
   CircularProgress, 
   Alert, 
   Paper, 
-  Grid, 
   LinearProgress, 
   Divider,
-  List,          // <-- Import ที่ขาดไป
-  ListItem,      // <-- Import ที่ขาดไป
-  ListItemText   // <-- Import ที่ขาดไป
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import dayjs from 'dayjs';
@@ -114,55 +113,67 @@ export default function IndividualDashboardPage() {
         <Typography color="text.secondary" gutterBottom>{data.user.email}</Typography>
         <Divider sx={{ my: 2 }} />
 
-        {/* Summary Section */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={4}>
-            <StatCard title="Total Logs Submitted" value={data.summary.totalLogs} />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <StatCard title="Total Units Contributed" value={data.summary.totalUnitsContributed} />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <StatCard title="Involved in Goals" value={`${data.summary.involvedGoalsCount} KPI(s)`} />
-          </Grid>
-        </Grid>
+        {/* Summary Section - CSS Grid */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(3, 1fr)',
+            },
+            gap: 3,
+            mb: 4,
+          }}
+        >
+          <StatCard title="Total Logs Submitted" value={data.summary.totalLogs} />
+          <StatCard title="Total Units Contributed" value={data.summary.totalUnitsContributed} />
+          <StatCard title="Involved in Goals" value={`${data.summary.involvedGoalsCount} KPI(s)`} />
+        </Box>
 
-        {/* Goal Contribution Section */}
-        <Box sx={{mb: 4}}>
-            <Typography variant="h5" component="h2" gutterBottom>Contribution to Goals</Typography>
-            <Grid container spacing={3}>
-            {data.goalProgress.length > 0 ? data.goalProgress.map(progress => (
-                <Grid item xs={12} md={6} lg={4} key={progress.goalId}>
-                    <ContributionCard progress={progress} />
-                </Grid>
-            )) : (
-                <Grid item xs={12}>
-                    <Paper sx={{p:3, textAlign:'center'}}>
-                        <Typography color="text.secondary">This user has not contributed to any goals yet.</Typography>
-                    </Paper>
-                </Grid>
-            )}
-            </Grid>
+        {/* Goal Contribution Section - CSS Grid */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h5" component="h2" gutterBottom>Contribution to Goals</Typography>
+          {data.goalProgress.length > 0 ? (
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  md: 'repeat(2, 1fr)',
+                  lg: 'repeat(3, 1fr)',
+                },
+                gap: 3,
+              }}
+            >
+              {data.goalProgress.map(progress => (
+                <ContributionCard key={progress.goalId} progress={progress} />
+              ))}
+            </Box>
+          ) : (
+            <Paper sx={{ p: 3, textAlign: 'center' }}>
+              <Typography color="text.secondary">This user has not contributed to any goals yet.</Typography>
+            </Paper>
+          )}
         </Box>
 
         {/* Recent Activity Section */}
         <Box>
-            <Typography variant="h5" component="h2" gutterBottom>Recent Activity</Typography>
-            <Paper>
-                <List>
-                    {data.recentLogs.map((log, index) => (
-                        <React.Fragment key={log.id}>
-                            <ListItem>
-                                <ListItemText 
-                                    primary={`${log.quantity} ${log.goal.unit} for "${log.goal.title}"`}
-                                    secondary={`On ${dayjs(log.completedAt).format('DD MMM YYYY')} - "${log.description}"`}
-                                />
-                            </ListItem>
-                            {index < data.recentLogs.length - 1 && <Divider />}
-                        </React.Fragment>
-                    ))}
-                </List>
-            </Paper>
+          <Typography variant="h5" component="h2" gutterBottom>Recent Activity</Typography>
+          <Paper>
+            <List>
+              {data.recentLogs.map((log, index) => (
+                <React.Fragment key={log.id}>
+                  <ListItem>
+                    <ListItemText 
+                      primary={`${log.quantity} ${log.goal.unit} for "${log.goal.title}"`}
+                      secondary={`On ${dayjs(log.completedAt).format('DD MMM YYYY')} - "${log.description}"`}
+                    />
+                  </ListItem>
+                  {index < data.recentLogs.length - 1 && <Divider />}
+                </React.Fragment>
+              ))}
+            </List>
+          </Paper>
         </Box>
 
       </Container>
