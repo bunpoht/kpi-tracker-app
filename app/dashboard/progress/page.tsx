@@ -182,7 +182,7 @@ export default function ProgressDashboardPage() {
                 <LabelList 
                   dataKey="percentage" 
                   position="top" 
-                  formatter={(value: number) => value > 0 ? `${Math.round(value)}%` : ''} 
+                  formatter={(value: any) => value > 0 ? `${Math.round(value)}%` : ''} 
                   fill="white"
                   fontSize={20}
                 />
