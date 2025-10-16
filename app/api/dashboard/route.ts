@@ -4,16 +4,11 @@ import dayjs from 'dayjs';
 
 const prisma = new PrismaClient();
 
-// เพิ่ม type สำหรับ context
-type Context = {
-  params: Promise<{ id: string }>;
-};
+// ลบ type Context ออก
 
-// เพิ่ม context parameter แม้ว่าจะไม่ได้ใช้ก็ตาม
-export async function GET(request: NextRequest, context: Context) {
+// ลบ context parameter ออก - ไฟล์นี้ไม่ได้อยู่ในโฟลเดอร์ [id]
+export async function GET(request: NextRequest) {
   try {
-    // await context.params; // ถ้าต้องการใช้ id ให้ uncomment บรรทัดนี้
-    
     const searchParams = request.nextUrl.searchParams;
     const goalId = searchParams.get('goalId');
 
