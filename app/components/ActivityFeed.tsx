@@ -16,24 +16,30 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useAuth } from '../context/AuthContext'; // Import useAuth เพื่อตรวจสอบสิทธิ์
+import { useAuth } from '../context/AuthContext';
 
 dayjs.extend(relativeTime);
 
-// Interface สำหรับ WorkLog (ต้องมี id และ author.id)
+// Interface สำหรับ WorkLog (เพิ่ม goalId และ images)
 interface WorkLog {
     id: string;
     description: string;
     quantity: number;
     completedAt: string;
+    goalId: string;
     author: {
         id: string;
         name: string;
     };
     goal: {
+        id: string;
         title: string;
         unit: string;
     };
+    images: {
+        id: string;
+        url: string;
+    }[];
 }
 
 // Interface สำหรับ Props ที่ Component นี้ต้องการ
@@ -44,7 +50,7 @@ interface ActivityFeedProps {
 }
 
 export default function ActivityFeed({ workLogs, onEdit, onDelete }: ActivityFeedProps) {
-    const { user } = useAuth(); // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่
+    const { user } = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedLog, setSelectedLog] = useState<WorkLog | null>(null);
 
