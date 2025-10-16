@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Grid, CircularProgress, Alert } from '@mui/material';
+import { Container, Typography, Box, CircularProgress, Alert } from '@mui/material';
 import ProtectedRoute from '../components/ProtectedRoute';
 import WorkLogForm, { WorkLogFormData } from '../components/WorkLogForm';
 import ActivityFeed from '../components/ActivityFeed';
@@ -115,14 +115,18 @@ export default function DashboardPage() {
           
           {error && <Alert severity="error" onClose={() => setError('')} sx={{mb: 2}}>{error}</Alert>}
 
-          <Grid container spacing={4}>
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, 
+            gap: 4 
+          }}>
             {/* Left Column: ฟอร์มสำหรับสร้าง Work Log ใหม่ */}
-            <Grid item xs={12} md={5}>
+            <Box>
               <WorkLogForm onSave={fetchWorkLogs} />
-            </Grid>
+            </Box>
             
             {/* Right Column: รายการ Activity ล่าสุด */}
-            <Grid item xs={12} md={7}>
+            <Box>
               {loading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                   <CircularProgress />
@@ -134,8 +138,8 @@ export default function DashboardPage() {
                   onDelete={handleDelete} 
                 />
               )}
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
 
           {/* ฟอร์มสำหรับแก้ไข (จะแสดงเป็น Dialog เมื่อ isEditFormOpen เป็น true) */}
           {isEditFormOpen && (
