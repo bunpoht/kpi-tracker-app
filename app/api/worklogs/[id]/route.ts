@@ -1,13 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+type Context = {
+  params: Promise<{ id: string }>;
+};
+
 // GET and DELETE functions remain the same as before
 
 // --- PUT: อัปเดต Work Log (เวอร์ชันอัปเกรด) ---
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-    const { id: workLogId } = params;
+export async function PUT(request: NextRequest, context: Context) {
+    const { id: workLogId } = await context.params;
     try {
         const body = await request.json();
         const { 
@@ -79,9 +83,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 
 // --- DELETE: ลบ Work Log ---
-// (โค้ดส่วนนี้เหมือนเดิม)
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-    const { id } = params;
+export async function DELETE(request: NextRequest, context: Context) {
+    const { id } = await context.params;
     try {
         await prisma.image.deleteMany({
             where: { workLogId: id },
