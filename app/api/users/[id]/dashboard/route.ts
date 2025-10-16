@@ -1,10 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-    const { id: userId } = params;
+type Context = {
+    params: Promise<{ id: string }>;
+};
+
+export async function GET(request: NextRequest, context: Context) {
+    const { id: userId } = await context.params;
 
     try {
         // 1. ดึงข้อมูล User
