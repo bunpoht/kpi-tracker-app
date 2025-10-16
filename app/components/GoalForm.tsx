@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle,
   TextField, Button, Box, Alert, Typography,
-  FormControl, InputLabel, Select, MenuItem, IconButton, Paper, Divider,
-  Grid, CircularProgress
+  FormControl, InputLabel, Select, MenuItem, IconButton, Divider,
+  Stack, CircularProgress
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -157,26 +157,23 @@ export default function GoalForm({ open, onClose, onSave, initialData }: GoalFor
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <Typography variant="h6" gutterBottom>Goal Details</Typography>
-            <Grid container spacing={2}>
-              <Grid xs={12}>
-                <TextField autoFocus margin="dense" label="Goal Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
-              </Grid>
-              <Grid xs={12} sm={4}>
+            <Stack spacing={2}>
+              <TextField autoFocus margin="dense" label="Goal Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
+              
+              <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
                 <TextField margin="dense" label="Unit (e.g., ชิ้น)" fullWidth value={unit} onChange={(e) => setUnit(e.target.value)} />
-              </Grid>
-              <Grid xs={12} sm={4}>
                 <DatePicker label="Start Date" value={startDate} sx={{ width: '100%' }} onChange={setStartDate} />
-              </Grid>
-              <Grid xs={12} sm={4}>
                 <DatePicker label="End Date" value={endDate} sx={{ width: '100%' }} onChange={setEndDate} />
-              </Grid>
-            </Grid>
+              </Box>
+            </Stack>
+            
             <Divider sx={{ my: 3 }} />
+            
             <Typography variant="h6" gutterBottom>Assignees & Targets</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Stack spacing={2}>
               {assignees.map((assignee, index) => (
-                <Grid container spacing={2} key={assignee.id} alignItems="center">
-                  <Grid xs={12} sm={8}>
+                <Box key={assignee.id} sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Box sx={{ flex: '1 1 300px', minWidth: '200px' }}>
                     <FormControl fullWidth>
                       <InputLabel>Assignee {index + 1}</InputLabel>
                       <Select
@@ -190,18 +187,19 @@ export default function GoalForm({ open, onClose, onSave, initialData }: GoalFor
                         {users.map(user => <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>)}
                       </Select>
                     </FormControl>
-                  </Grid>
-                  <Grid xs={10} sm={3}>
+                  </Box>
+                  
+                  <Box sx={{ flex: '0 1 150px', minWidth: '100px' }}>
                     <TextField label="Target" type="number" fullWidth value={assignee.target} onChange={(e) => handleAssigneeChange(assignee.id, 'target', e.target.value)} />
-                  </Grid>
-                  <Grid xs={2} sm={1} sx={{ textAlign: 'center' }}>
-                    <IconButton onClick={() => handleRemoveAssignee(assignee.id)} disabled={!isEditing && assignees.length <= 1}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
+                  </Box>
+                  
+                  <IconButton onClick={() => handleRemoveAssignee(assignee.id)} disabled={!isEditing && assignees.length <= 1}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
               ))}
-            </Box>
+            </Stack>
+            
             <Button startIcon={<AddCircleOutlineIcon />} onClick={handleAddAssignee} sx={{ mt: 2 }}>Add Assignee</Button>
           </Box>
         </DialogContent>
