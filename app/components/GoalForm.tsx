@@ -5,9 +5,8 @@ import {
   Dialog, DialogActions, DialogContent, DialogTitle,
   TextField, Button, Box, Alert, Typography,
   FormControl, InputLabel, Select, MenuItem, IconButton, Paper, Divider,
-  CircularProgress
+  Grid, CircularProgress
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
@@ -159,16 +158,16 @@ export default function GoalForm({ open, onClose, onSave, initialData }: GoalFor
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <Typography variant="h6" gutterBottom>Goal Details</Typography>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
+              <Grid xs={12}>
                 <TextField autoFocus margin="dense" label="Goal Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} />
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid xs={12} sm={4}>
                 <TextField margin="dense" label="Unit (e.g., ชิ้น)" fullWidth value={unit} onChange={(e) => setUnit(e.target.value)} />
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid xs={12} sm={4}>
                 <DatePicker label="Start Date" value={startDate} sx={{ width: '100%' }} onChange={setStartDate} />
               </Grid>
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid xs={12} sm={4}>
                 <DatePicker label="End Date" value={endDate} sx={{ width: '100%' }} onChange={setEndDate} />
               </Grid>
             </Grid>
@@ -177,7 +176,7 @@ export default function GoalForm({ open, onClose, onSave, initialData }: GoalFor
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {assignees.map((assignee, index) => (
                 <Grid container spacing={2} key={assignee.id} alignItems="center">
-                  <Grid size={{ xs: 12, sm: 8 }}>
+                  <Grid xs={12} sm={8}>
                     <FormControl fullWidth>
                       <InputLabel>Assignee {index + 1}</InputLabel>
                       <Select
@@ -192,10 +191,10 @@ export default function GoalForm({ open, onClose, onSave, initialData }: GoalFor
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid size={{ xs: 10, sm: 3 }}>
+                  <Grid xs={10} sm={3}>
                     <TextField label="Target" type="number" fullWidth value={assignee.target} onChange={(e) => handleAssigneeChange(assignee.id, 'target', e.target.value)} />
                   </Grid>
-                  <Grid size={{ xs: 2, sm: 1 }} sx={{ textAlign: 'center' }}>
+                  <Grid xs={2} sm={1} sx={{ textAlign: 'center' }}>
                     <IconButton onClick={() => handleRemoveAssignee(assignee.id)} disabled={!isEditing && assignees.length <= 1}>
                       <DeleteIcon />
                     </IconButton>
