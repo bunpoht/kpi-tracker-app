@@ -3,8 +3,13 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// เปลี่ยน type ของ context ให้เหมือนกันทุก function
+type Context = {
+  params: Promise<{ id: string }>;
+};
+
 // --- GET Function ---
-export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, context: Context) {
   const { id } = await context.params;
 
   try {
@@ -20,7 +25,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 }
 
 // --- PUT Function ---
-export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function PUT(request: NextRequest, context: Context) {
   const { id: goalId } = await context.params;
 
   try {
@@ -79,7 +84,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 }
 
 // --- DELETE Function ---
-export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, context: Context) {
   const { id } = await context.params;
 
   try {
