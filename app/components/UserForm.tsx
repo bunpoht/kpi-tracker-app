@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle,
-  TextField, Button, Alert, FormControl, InputLabel, Select, MenuItem
+  TextField, Button, Alert, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent
 } from '@mui/material';
 
 // Interface สำหรับข้อมูล User ที่จะใช้ในฟอร์ม
@@ -39,11 +39,17 @@ export default function UserForm({ open, onClose, onSave, initialData }: UserFor
     }
   }, [initialData]);
   
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  // สำหรับ TextField
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData(prev => ({ ...prev, [name as string]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // สำหรับ Select component
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    const { name, value } = event.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async () => {
     setError('');
@@ -101,7 +107,7 @@ export default function UserForm({ open, onClose, onSave, initialData }: UserFor
                 name="role"
                 value={formData.role || 'USER'}
                 label="Role"
-                onChange={handleChange}
+                onChange={handleSelectChange}
             >
                 <MenuItem value={'USER'}>User</MenuItem>
                 <MenuItem value={'ADMIN'}>Admin</MenuItem>
