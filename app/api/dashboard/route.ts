@@ -4,8 +4,16 @@ import dayjs from 'dayjs';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+// เพิ่ม type สำหรับ context
+type Context = {
+  params: Promise<{ id: string }>;
+};
+
+// เพิ่ม context parameter แม้ว่าจะไม่ได้ใช้ก็ตาม
+export async function GET(request: NextRequest, context: Context) {
   try {
+    // await context.params; // ถ้าต้องการใช้ id ให้ uncomment บรรทัดนี้
+    
     const searchParams = request.nextUrl.searchParams;
     const goalId = searchParams.get('goalId');
 
@@ -79,7 +87,6 @@ export async function GET(request: NextRequest) {
     }
 
     // --- Default Case: Handle request for the overall dashboard ---
-    // (ส่วนนี้เหมือนเดิม ไม่มีการเปลี่ยนแปลง)
     const fiscalYearStr = searchParams.get('year');
     const monthStr = searchParams.get('month');
     let startDate: Date;
