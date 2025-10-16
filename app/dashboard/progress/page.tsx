@@ -6,7 +6,6 @@ import {
   Container, 
   Typography, 
   Box, 
-  Grid, 
   CircularProgress, 
   Alert, 
   Paper,
@@ -123,15 +122,30 @@ export default function ProgressDashboardPage() {
 
     return (
       <>
-        <Grid container spacing={3} sx={{ mb: 4 }}>
+        {/* Progress Cards using CSS Grid */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            },
+            gap: 3,
+            mb: 4,
+          }}
+        >
           {dashboardData.map(data => (
-            <Grid item xs={12} sm={6} md={4} key={data.id}>
-              <Link href={`/dashboard/goals/${data.id}`} passHref style={{ textDecoration: 'none', height: '100%', display: 'block' }}>
-                <ProgressCard data={data} />
-              </Link>
-            </Grid>
+            <Link 
+              key={data.id}
+              href={`/dashboard/goals/${data.id}`} 
+              passHref 
+              style={{ textDecoration: 'none', height: '100%', display: 'block' }}
+            >
+              <ProgressCard data={data} />
+            </Link>
           ))}
-        </Grid>
+        </Box>
         
         <Paper sx={{ p: 2, height: 400, mb: 4 }}>
           <Typography variant="h6" component="h3" gutterBottom>
@@ -188,26 +202,33 @@ export default function ProgressDashboardPage() {
             Overall Progress Dashboard
           </Typography>
 
+          {/* Filter Section using CSS Grid */}
           <Paper sx={{ p: 2, mb: 3 }}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item><Typography>Filter by period:</Typography></Grid>
-              <Grid item xs={12} sm={3}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Month</InputLabel>
-                  <Select value={selectedMonth} label="Month" onChange={(e) => setSelectedMonth(e.target.value as number)}>
-                    {months.map(m => <MenuItem key={m.value} value={m.value}>{m.name}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Fiscal Year</InputLabel>
-                  <Select value={selectedFiscalYear} label="Fiscal Year" onChange={(e) => setSelectedFiscalYear(e.target.value as number)}>
-                    {fiscalYears.map(y => <MenuItem key={y} value={y}>Fiscal Year {y}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  sm: 'auto 1fr 1fr',
+                },
+                gap: 2,
+                alignItems: 'center',
+              }}
+            >
+              <Typography>Filter by period:</Typography>
+              <FormControl fullWidth size="small">
+                <InputLabel>Month</InputLabel>
+                <Select value={selectedMonth} label="Month" onChange={(e) => setSelectedMonth(e.target.value as number)}>
+                  {months.map(m => <MenuItem key={m.value} value={m.value}>{m.name}</MenuItem>)}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth size="small">
+                <InputLabel>Fiscal Year</InputLabel>
+                <Select value={selectedFiscalYear} label="Fiscal Year" onChange={(e) => setSelectedFiscalYear(e.target.value as number)}>
+                  {fiscalYears.map(y => <MenuItem key={y} value={y}>Fiscal Year {y}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </Box>
           </Paper>
 
           {renderContent()}
