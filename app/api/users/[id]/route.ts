@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 // หมายเหตุ: ในระบบ production จริง ควรมี Middleware ที่แข็งแกร่งกว่านี้
 // เพื่อตรวจสอบ Token และ Role ของผู้ใช้ที่ส่ง request มาทุกครั้ง
@@ -6,9 +6,13 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+type Context = {
+  params: Promise<{ id: string }>;
+};
+
 // --- GET: ดึงข้อมูลผู้ใช้ตาม ID ---
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(request: NextRequest, context: Context) {
+  const { id } = await context.params;
   // TODO: Add Admin role check
   try {
     const user = await prisma.user.findUnique({
@@ -32,8 +36,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
 }
 
 // --- PUT: อัปเดตข้อมูลผู้ใช้ (เช่น เปลี่ยนชื่อ, เปลี่ยน Role) ---
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function PUT(request: NextRequest, context: Context) {
+  const { id } = await context.params;
   // TODO: Add Admin role check
   try {
     const body = await request.json();
@@ -65,8 +69,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 // --- DELETE: ลบผู้ใช้ ---
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function DELETE(request: NextRequest, context: Context) {
+  const { id } = await context.params;
   // TODO: Add Admin role check
   try {
     // ก่อนลบ User, อาจจะต้องพิจารณาว่าจะทำอย่างไรกับ WorkLog ที่ User นี้สร้างไว้
