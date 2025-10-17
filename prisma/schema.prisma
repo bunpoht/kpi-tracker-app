@@ -101,3 +101,8 @@ model Image {
   workLogId   String
   workLog     WorkLog   @relation(fields: [workLogId], references: [id], onDelete: Cascade)
 }
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
