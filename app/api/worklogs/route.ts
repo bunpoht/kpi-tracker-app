@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
+export const dynamic = "force-dynamic";
+
 const prisma = new PrismaClient();
 
 // --- GET: ดึงข้อมูล WorkLog ทั้งหมด (พร้อมข้อมูลที่เกี่ยวข้อง) ---

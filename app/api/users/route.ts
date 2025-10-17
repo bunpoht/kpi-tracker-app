@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+export const dynamic = "force-dynamic";
 // TODO: เพิ่ม Middleware ตรวจสอบว่าเป็น Admin หรือไม่
 
 const prisma = new PrismaClient();

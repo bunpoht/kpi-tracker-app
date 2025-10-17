@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+
+export const dynamic = "force-dynamic";
 // หมายเหตุ: ในระบบ production จริง ควรมี Middleware ที่แข็งแกร่งกว่านี้
 // เพื่อตรวจสอบ Token และ Role ของผู้ใช้ที่ส่ง request มาทุกครั้ง
 // แต่ในขั้นตอนนี้ เราจะเขียน Logic การตรวจสอบไว้ใน API โดยตรงก่อน

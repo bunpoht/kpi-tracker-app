@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
 
+export const dynamic = "force-dynamic";
+
 const prisma = new PrismaClient();
 
 // ลบ type Context ออก

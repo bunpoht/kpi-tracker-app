@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient, Prisma } from '@prisma/client';
 
+export const dynamic = "force-dynamic";
+
 const prisma = new PrismaClient();
 
 // --- GET: ดึงข้อมูลเป้าหมายทั้งหมด ---

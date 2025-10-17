@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
+export const dynamic = "force-dynamic";
+
 // สร้าง instance ของ PrismaClient เพื่อใช้คุยกับฐานข้อมูล
 const prisma = new PrismaClient();
 
